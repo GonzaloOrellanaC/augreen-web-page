@@ -1,4 +1,6 @@
-# augreen-web-page
+# AuGreen Web Page
+
+![AuGreen Logo](frontend/public/images/logo-augreen.svg)
 
 Monorepo para la web de Augreen (frontend + backend).
 
