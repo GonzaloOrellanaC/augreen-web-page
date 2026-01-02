@@ -1,0 +1,40 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+logs
+*.log
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Coverage and cache
+coverage/
+.cache/
+
+# Archives
+*.tgz
+*.zip
+
+# PM2 logs
+pm2*.log

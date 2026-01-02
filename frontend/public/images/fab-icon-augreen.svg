@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100" role="img" aria-label="AG logo">
+    <title>AG</title>
+    <rect width="50" height="50" rx="10" fill="transparent" />
+    <text x="5" y="73" font-family="'London Bridge Black', 'Archivo Black', sans-serif" font-weight="900" font-size="60">
+        <tspan fill="#E7F21C">A</tspan>
+        <tspan x="45" fill="#12B21E">G</tspan>
+    </text>
+</svg>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="90" viewBox="0 0 200 90" role="img" aria-labelledby="title desc">
+  <title id="title">AuGreen logo</title>
+  <desc id="desc">AU badge in yellow and wordmark Green in accent color with tagline</desc>
+  <defs>
+    <style>
+      @font-face {
+        font-family: 'London Bridge Black';
+        src: url('../theme/london-bridge-black.ttf') format('truetype');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      .logo-text-au { fill: #E7F21C; font-family: 'London Bridge Black', 'Archivo Black', sans-serif; font-size:40px; font-weight:900; }
+      .badge-text { fill: #071021; font-family: 'London Bridge Black', 'Archivo Black', sans-serif; font-weight:900; font-size:22px; }
+      .logo-text-green { fill: #12B21E; font-family: 'London Bridge Black', 'Archivo Black', sans-serif; font-size:40px; font-weight:900; }
+      .tagline { fill: #12B21E; font-family: 'London Bridge Black', system-ui, Arial, sans-serif; font-size:12.5px; letter-spacing:1.2px; }
+    </style>
+  </defs>
+
+  <!-- AU badge -->
+  <text x="5" y="50" class="logo-text-au">Au</text>
+
+  <!-- Wordmark -->
+  <text x="63" y="50" class="logo-text-green">Green</text>
+
+  <!-- Tagline -->
+  <text x="5" y="68" class="tagline">EFICIENCIA ENERGÉTICA</text>
+</svg>

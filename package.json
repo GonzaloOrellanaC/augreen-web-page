@@ -1,0 +1,15 @@
+{
+  "name": "augreen-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "scripts": {
+    "start:backend:prod": "cd backend && npm run build && pm2 start npm --name augreen-backend -- start",
+    "start:backend:dev": "cd backend && npm install && npm run dev",
+    "start:frontend": "cd frontend && npm install && npm run dev",
+    "dev": "concurrently \"npm run start:backend:dev\" \"npm run start:frontend\"",
+    "start": "echo \"Use 'npm run dev' for development or 'npm run start:backend:prod' on a server with pm2 installed globally.\""
+  }
+}
