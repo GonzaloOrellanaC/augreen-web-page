@@ -3,6 +3,7 @@
 import legacy from '@vitejs/plugin-legacy'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,6 +11,11 @@ export default defineConfig({
     react(),
     legacy()
   ],
+  resolve: {
+    alias: [
+      { find: 'swiper/react', replacement: path.resolve(__dirname, 'node_modules/swiper/swiper-react.mjs') }
+    ]
+  },
   server: {
     port: 5121
   },

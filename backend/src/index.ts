@@ -7,7 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import { attachSockets } from './socket';
-import { sendEmail } from './email';
+import contactRouter from './routes/contact';
 
 dotenv.config();
 
@@ -39,17 +39,8 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
   res.json({ filename: req.file.filename, url: fileUrl });
 });
 
-// Email endpoint
-app.post('/api/send-email', async (req, res) => {
-  try {
-    const { to, subject, text, html } = req.body;
-    if (!to || !subject) return res.status(400).json({ error: 'Missing fields' });
-    const result = await sendEmail({ to, subject, text, html });
-    res.json({ ok: true, id: result.id });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || 'Email error' });
-  }
-});
+// Contact route (POST /api/contact)
+app.use('/api/contact', contactRouter);
 
 // Simple health
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
@@ -59,11 +50,13 @@ attachSockets(server);
 
 // Serve frontend static files if they exist (build output)
 const frontendDist = path.join(__dirname, '..', '..', 'frontend', 'dist');
+console.log('Checking for frontend static files in:', frontendDist);
 if (fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
 
   // Fallback to index.html for client-side routing (ignore API and uploads paths)
   app.get('*', (req, res) => {
+    console.log('Received request for:', req.path);
     if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
       return res.status(404).end();
     }

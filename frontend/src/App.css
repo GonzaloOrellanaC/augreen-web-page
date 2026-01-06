@@ -107,7 +107,7 @@ h1,h2,h3,button, .logo-text { font-family: var(--font-logo); }
 .swiper-pagination-bullet { background: rgba(255,255,255,0.6); }
 
 /* Sections & Grid */
-.section-padding { padding:100px 28px; }
+.section-padding { padding:150px 28px; }
 .ion-grid { max-width:1400px; margin:0 auto; }
 .ion-row { display:flex; gap:24px; flex-wrap:wrap; }
 .ion-col { flex:1 1 260px; }
