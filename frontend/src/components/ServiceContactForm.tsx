@@ -36,7 +36,7 @@ const ServiceContactForm: React.FC<Props> = ({ onClose, defaultService }) => {
             <label style={{ display: 'block', fontSize: 13, marginBottom: 6 }}>Servicio 📄</label>
             <select value={service} onChange={(e) => setService(e.target.value)} style={{ width: '100%', padding: 8 }}>
               <option>Paneles Solares</option>
-              <option>Climatización Inverter</option>
+              <option>Climatización Residencial</option>
               <option>Bombas de Calor</option>
               <option>Servicio Técnico</option>
             </select>
