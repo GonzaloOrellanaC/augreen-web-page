@@ -7,8 +7,8 @@ type Props = {
   defaultService?: string;
 };
 
-/* const PHONE = '56981912157'; */
-const PHONE = '56952210967';
+const PHONE = '56981912157';
+/* const PHONE = '56952210967'; */
 
 const ServiceContactForm: React.FC<Props> = ({ onClose, defaultService }) => {
   const [name, setName] = useState('');
