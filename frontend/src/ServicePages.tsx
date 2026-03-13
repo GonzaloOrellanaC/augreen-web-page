@@ -87,13 +87,12 @@ export const PanelesSolares: React.FC = () => (
 
 export const ClimatizacionInverter: React.FC = () => (
   <ServiceTemplate
-    title="Climatización Inverter"
-    intro="Soluciones inverter para climatizar espacios con eficiencia energética, control de zonas y bajo consumo."
+    title="Climatización Residencial"
+    intro="Máximo confort con el mínimo gasto. Cambia a climatización eficiente y ahorra hasta un 70% en tus facturas. Tu bienestar, ahora más rentable."
     bullets={[
-      'Sistemas multi-split y VRF según escala',
-      'Controles inteligentes y programación',
-      'Instalación con criterios acústicos y estéticos',
-      'Servicio postventa y optimización de consumo'
+      'Fuentes eficientes para climatizar',
+      'Suelo radiante, fancoils, convectores, aire acondicionado',
+      'Otras aplicaciones de bombas de calor'
     ]}
     image='BROCHURE-CLIMATIZACION.png'
   />

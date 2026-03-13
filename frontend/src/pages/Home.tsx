@@ -54,6 +54,12 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
     if (el) (el as HTMLElement).scrollTop = 0;
   };
 
+  const openInfo = (slug: string) => {
+    history.push(`/info/${slug}`);
+    const el = document.querySelector('.ion-content');
+    if (el) (el as HTMLElement).scrollTop = 0;
+  };
+
   // inject fab SVG when chat is closed
   useEffect(() => {
     const el = document.getElementById('fabIcon');
@@ -64,7 +70,7 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
 
   const services = [
     { id: 1, slug: 'paneles', title: 'Paneles Solares', icon: <Sun size={30} />, color: '#E7F21C', desc: 'Paneles fotovoltaicos de alta gama.' },
-    { id: 2, slug: 'climatizacion', title: 'Climatización Inverter', icon: <Zap size={30} />, color: '#12B21E', desc: 'Sistemas Inverter de alta eficiencia.' },
+    { id: 2, slug: 'climatizacion', title: 'Climatización Residencial', icon: <Zap size={30} />, color: '#12B21E', desc: 'Climatización Residencial' },
     { id: 3, slug: 'bombas', title: 'Bombas de Calor', icon: <Thermometer size={30} />, color: '#12B21E', desc: 'Bombas de calor sustentables.' },
     { id: 4, slug: 'tecnico', title: 'Servicio Técnico', icon: <Settings size={30} />, color: '#4A5568', desc: 'Mantenimiento técnico certificado.' }
   ];
@@ -252,7 +258,71 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
               </Swiper>
             </section>
 
-            <section className="section-padding" id="servicios">
+            {/* Highlighted CTA to magazine (Prensa) */}
+            <section className="section-padding" id="revista-cta" style={{ paddingTop: 40, paddingBottom: 40 }}>
+              <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 480px' }}>
+                    <div className="featured-card" onClick={() => history.push('/revista-ozono-v37')} style={{ cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
+                      <img src="/images/geotermia/geotermia.png" alt="Revista Ozono" style={{ width: 160, height: 120, objectFit: 'cover', borderRadius: 8 }} />
+                      <div>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--brand-yellow)', letterSpacing: 1 }}>PRENSA</div>
+                        <h3 style={{ margin: '6px 0' }}>Revista OZONO — Ed. 37</h3>
+                        <p style={{ margin: 0, color: 'var(--text-muted)' }}>Artículo destacado sobre soluciones de eficiencia energética y geotermia. Abrir en la página 26.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ flex: '0 1 260px' }}>
+                  <button className="btn-contact-nav" onClick={() => history.push('/revista-ozono-v37')} style={{ width: '100%', padding: '18px' }}>VER ARTÍCULO (p.26)</button>
+                </div>
+              </div>
+            </section>
+
+            {/* Energy sources references */}
+            <section className="section-padding" id="fuentes" style={{ paddingTop: 40, paddingBottom: 40 }}>
+              <div className="section-header">
+                <span className="section-tag">FUENTES</span>
+                <h2>De dónde sacamos la energía para sus espacios</h2>
+                <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Explora las tecnologías y sistemas de distribución que aplicamos en proyectos reales: geotermia, aerotermia y soluciones de distribución térmica.</p>
+              </div>
+
+              <IonGrid>
+                <IonRow>
+                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('geotermia')} style={{ cursor: 'pointer' }}>
+                    <div className="card-premium">
+                      <img src="/images/geotermia/geotermia.png" alt="Geotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                      <h3>Geotermia</h3>
+                      <p style={{ color: 'var(--text-muted)' }}>Aprovechamiento del calor del subsuelo mediante intercambios térmicos para calefacción y ACS.</p>
+                    </div>
+                  </IonCol>
+
+                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('aerotermia')} style={{ cursor: 'pointer' }}>
+                    <div className="card-premium">
+                      <img src="/images/geotermia/arotermia.png" alt="Aerotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                      <h3>Aerotermia</h3>
+                      <p style={{ color: 'var(--text-muted)' }}>Extracción de energía del aire exterior para calefacción, refrigeración y agua caliente.</p>
+                    </div>
+                  </IonCol>
+
+                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('distribucion')} style={{ cursor: 'pointer' }}>
+                    <div className="card-premium">
+                      <img src="/images/geotermia/geotermia.png" alt="Distribución" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                      <h3>Distribución</h3>
+                      <p style={{ color: 'var(--text-muted)' }}>Suelo radiante, fancoils y radiadores de baja temperatura para maximizar la eficiencia.</p>
+                    </div>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </section>
+
+            <section className="section-padding" id="servicios" style={{ paddingTop: 40, paddingBottom: 40 }}>
+              <div className="section-header">
+                <span className="section-tag">SERVICIOS</span>
+                <h2>Nuestras soluciones</h2>
+                <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Proyectos y servicios diseñados para maximizar eficiencia y confort.</p>
+              </div>
               <IonGrid>
                 <IonRow>
                   {services.map(s => (
@@ -434,7 +504,7 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
                   <h4>SERVICIOS</h4>
                   <ul className="footer-links">
                     <li><a href="#">Paneles Solares</a></li>
-                    <li><a href="#">Climatización Inverter</a></li>
+                    <li><a href="#">Climatización Residencial</a></li>
                     <li><a href="#">Bombas de Calor</a></li>
                     <li><a href="#">Servicio Técnico</a></li>
                   </ul>

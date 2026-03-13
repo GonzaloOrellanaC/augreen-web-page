@@ -30,6 +30,10 @@ import './App.css';
 import './theme/variables.css';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
+import Geotermia from './pages/Geotermia';
+import Aerotermia from './pages/Aerotermia';
+import SistemasDistribucion from './pages/SistemasDistribucion';
+import RevistaViewer from './pages/RevistaViewer';
 import { Route } from 'react-router-dom';
 import { PanelesSolares, ClimatizacionInverter, BombasDeCalor, ServicioTecnico } from './ServicePages';
 
@@ -42,6 +46,18 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route exact path="/info/geotermia">
+            <Geotermia />
+          </Route>
+          <Route exact path="/info/aerotermia">
+            <Aerotermia />
+          </Route>
+          <Route exact path="/info/distribucion">
+            <SistemasDistribucion />
+          </Route>
+          <Route exact path="/revista-ozono-v37">
+            <RevistaViewer />
           </Route>
           <Route exact path="/servicios/paneles">
             <PanelesSolares />
