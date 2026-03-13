@@ -13,6 +13,7 @@ const Home: React.FC = () => {
 
   const [scrolled, setScrolled] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   // navigation
@@ -67,6 +68,30 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
       el.innerHTML = SVGAuGreenLogoFabIconString(36);
     }
   }, []);
+
+  const downloadBrochure = async () => {
+    try {
+      setDownloading(true);
+      const apiBase = (import.meta as any)?.env?.VITE_API_BASE || 'http://localhost:5120';
+      const resp = await fetch(`${apiBase}/api/brochure`, { method: 'GET' });
+      if (!resp.ok) throw new Error('Failed to fetch brochure');
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AuGreen_Brochure.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Download brochure failed', err);
+      alert('No se pudo descargar el brochure. Intenta nuevamente.');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const services = [
     { id: 1, slug: 'paneles', title: 'Paneles Solares', icon: <Sun size={30} />, color: '#E7F21C', desc: 'Paneles fotovoltaicos de alta gama.' },
@@ -131,9 +156,13 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
           <IonContent className="side-menu">
               <IonList>
                 <IonMenuToggle autoHide={false}>
-                  <IonItem button lines="none" className="menu-item">Inicio</IonItem>
-                  <IonItem button lines="none" className="menu-item">Servicios</IonItem>
-                  <IonItem button lines="none" className="menu-item">Cotizar Proyecto</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('main-content'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Inicio</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('revista-cta'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Prensa</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('fuentes'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Fuentes</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('servicios'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Servicios</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('galeria'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Galería</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { scrollToId('contacto'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Contacto</IonItem>
+                  <IonItem button lines="none" className="menu-item" onClick={() => { history.push('/servicios'); const m = document.querySelector('ion-menu'); if (m) (m as any).close(); }}>Cotizar Proyecto</IonItem>
                 </IonMenuToggle>
               </IonList>
           </IonContent>
@@ -148,7 +177,12 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
               <IonButtons slot="end" className="header-actions">
                 <div className="nav-link-group desktop-only">
                   <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('main-content'); }}>Inicio</IonButton>
-                  <IonButton className="btn-contact-nav">Cotizar Proyecto</IonButton>
+                  <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('revista-cta'); }}>Prensa</IonButton>
+                  <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('fuentes'); }}>Fuentes</IonButton>
+                  <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('servicios'); }}>Servicios</IonButton>
+                  <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('galeria'); }}>Galería</IonButton>
+                  <IonButton fill="clear" className="nav-btn" onClick={() => { scrollToId('contacto'); }}>Contacto</IonButton>
+                  <IonButton className="btn-contact-nav" onClick={() => history.push('/servicios')}>Cotizar Proyecto</IonButton>
                 </div>
 
                 {/* Menu button for mobile */}
@@ -258,9 +292,25 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
               </Swiper>
             </section>
 
+            {/* Prensa: video embed */}
+            <section id="prensa-video" className="section-padding" style={{ paddingTop: 20, paddingBottom: 20 }}>
+              <div className="container">
+                <h3 style={{ marginBottom: 12 }}>Video destacado</h3>
+                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: 8, boxShadow: '0 10px 30px rgba(2,8,23,0.06)' }}>
+                  <iframe
+                    src="https://www.youtube.com/embed/DhhHdTjbm30"
+                    title="Video destacado"
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                    allowFullScreen
+                  />
+                </div>
+                <p style={{ color: 'var(--text-muted)', marginTop: 8 }}>Ver video embebido. Si no carga correctamente, <a href="https://www.youtube.com/watch?v=DhhHdTjbm30" target="_blank" rel="noreferrer">abrir en YouTube</a>.</p>
+              </div>
+            </section>
+
             {/* Highlighted CTA to magazine (Prensa) */}
             <section className="section-padding" id="revista-cta" style={{ paddingTop: 40, paddingBottom: 40 }}>
-              <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+              <div className="container" style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
                 <div style={{ flex: '1 1 480px' }}>
                     <div className="featured-card" onClick={() => history.push('/revista-ozono-v37')} style={{ cursor: 'pointer' }}>
                     <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
@@ -273,7 +323,6 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
                     </div>
                   </div>
                 </div>
-
                 <div style={{ flex: '0 1 260px' }}>
                   <button className="btn-contact-nav" onClick={() => history.push('/revista-ozono-v37')} style={{ width: '100%', padding: '18px' }}>VER ARTÍCULO (p.26)</button>
                 </div>
@@ -282,63 +331,67 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
 
             {/* Energy sources references */}
             <section className="section-padding" id="fuentes" style={{ paddingTop: 40, paddingBottom: 40 }}>
-              <div className="section-header">
-                <span className="section-tag">FUENTES</span>
-                <h2>De dónde sacamos la energía para sus espacios</h2>
-                <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Explora las tecnologías y sistemas de distribución que aplicamos en proyectos reales: geotermia, aerotermia y soluciones de distribución térmica.</p>
+              <div className="container">
+                <div className="section-header">
+                  <span className="section-tag">FUENTES</span>
+                  <h2>De dónde sacamos la energía para sus espacios</h2>
+                  <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Explora las tecnologías y sistemas de distribución que aplicamos en proyectos reales: geotermia, aerotermia y soluciones de distribución térmica.</p>
+                </div>
+
+                <IonGrid>
+                  <IonRow>
+                    <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('geotermia')} style={{ cursor: 'pointer' }}>
+                      <div className="card-premium">
+                        <img src="/images/geotermia/geotermia.png" alt="Geotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                        <h3>Geotermia</h3>
+                        <p style={{ color: 'var(--text-muted)' }}>Aprovechamiento del calor del subsuelo mediante intercambios térmicos para calefacción y ACS.</p>
+                      </div>
+                    </IonCol>
+
+                    <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('aerotermia')} style={{ cursor: 'pointer' }}>
+                      <div className="card-premium">
+                        <img src="/images/geotermia/arotermia.png" alt="Aerotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                        <h3>Aerotermia</h3>
+                        <p style={{ color: 'var(--text-muted)' }}>Extracción de energía del aire exterior para calefacción, refrigeración y agua caliente.</p>
+                      </div>
+                    </IonCol>
+
+                    <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('distribucion')} style={{ cursor: 'pointer' }}>
+                      <div className="card-premium">
+                        <img src="/images/geotermia/geotermia.png" alt="Distribución" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
+                        <h3>Distribución</h3>
+                        <p style={{ color: 'var(--text-muted)' }}>Suelo radiante, fancoils y radiadores de baja temperatura para maximizar la eficiencia.</p>
+                      </div>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
               </div>
-
-              <IonGrid>
-                <IonRow>
-                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('geotermia')} style={{ cursor: 'pointer' }}>
-                    <div className="card-premium">
-                      <img src="/images/geotermia/geotermia.png" alt="Geotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
-                      <h3>Geotermia</h3>
-                      <p style={{ color: 'var(--text-muted)' }}>Aprovechamiento del calor del subsuelo mediante intercambios térmicos para calefacción y ACS.</p>
-                    </div>
-                  </IonCol>
-
-                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('aerotermia')} style={{ cursor: 'pointer' }}>
-                    <div className="card-premium">
-                      <img src="/images/geotermia/arotermia.png" alt="Aerotermia" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
-                      <h3>Aerotermia</h3>
-                      <p style={{ color: 'var(--text-muted)' }}>Extracción de energía del aire exterior para calefacción, refrigeración y agua caliente.</p>
-                    </div>
-                  </IonCol>
-
-                  <IonCol sizeXs="12" sizeMd="4" onClick={() => openInfo('distribucion')} style={{ cursor: 'pointer' }}>
-                    <div className="card-premium">
-                      <img src="/images/geotermia/geotermia.png" alt="Distribución" style={{ width: '100%', borderRadius: 6, marginBottom: 12 }} />
-                      <h3>Distribución</h3>
-                      <p style={{ color: 'var(--text-muted)' }}>Suelo radiante, fancoils y radiadores de baja temperatura para maximizar la eficiencia.</p>
-                    </div>
-                  </IonCol>
-                </IonRow>
-              </IonGrid>
             </section>
 
             <section className="section-padding" id="servicios" style={{ paddingTop: 40, paddingBottom: 40 }}>
-              <div className="section-header">
-                <span className="section-tag">SERVICIOS</span>
-                <h2>Nuestras soluciones</h2>
-                <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Proyectos y servicios diseñados para maximizar eficiencia y confort.</p>
-              </div>
-              <IonGrid>
-                <IonRow>
-                  {services.map(s => (
-                    <IonCol key={s.id} className="service-col" onClick={() => openService(s.slug)} style={{ cursor: 'pointer' }}>
-                      <div className="card-premium">
-                        <div className="icon-box" style={{ background: `${s.color}15`, color: s.color }}>
-                          {s.icon}
+              <div className="container">
+                <div className="section-header">
+                  <span className="section-tag">SERVICIOS</span>
+                  <h2>Nuestras soluciones</h2>
+                  <p style={{ color: 'var(--text-muted)', maxWidth: 800 }}>Proyectos y servicios diseñados para maximizar eficiencia y confort.</p>
+                </div>
+                <IonGrid>
+                  <IonRow>
+                    {services.map(s => (
+                      <IonCol key={s.id} className="service-col" onClick={() => openService(s.slug)} style={{ cursor: 'pointer' }}>
+                        <div className="card-premium">
+                          <div className="icon-box" style={{ background: `${s.color}15`, color: s.color }}>
+                            {s.icon}
+                          </div>
+                          <h3>{s.title}</h3>
+                          <p>{s.desc}</p>
+                          <div className="card-cta">DETALLES TÉCNICOS <ArrowRight size={14} /></div>
                         </div>
-                        <h3>{s.title}</h3>
-                        <p>{s.desc}</p>
-                        <div className="card-cta">DETALLES TÉCNICOS <ArrowRight size={14} /></div>
-                      </div>
-                    </IonCol>
-                  ))}
-                </IonRow>
-              </IonGrid>
+                      </IonCol>
+                    ))}
+                  </IonRow>
+                </IonGrid>
+              </div>
             </section>
 
             {/* Stats (below hero) */}
@@ -375,7 +428,7 @@ const SVGAuGreenLogoFabIconString = (size = 40) => {
                 <h2>INGENIERÍA DE PRECISIÓN EN CADA DETALLE.</h2>
                 <p>En <strong>AuGreen</strong>, entendemos que la eficiencia no es una opción, sino una necesidad. Con más de una década en el mercado chileno, transformamos espacios a través de tecnología climática de vanguardia.</p>
                 <p>Nuestro equipo de ingenieros y técnicos certificados garantiza que cada watt de energía sea optimizado al máximo, reduciendo costos operativos y huella de carbono.</p>
-                <button className="btn-contact-nav" style={{ background: 'var(--text-main)' }}>DESCARGAR BROCHURE</button>
+                {/* Brochure download temporarily removed */}
               </div>
             </section>
 

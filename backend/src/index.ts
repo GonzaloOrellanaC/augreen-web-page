@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
+// PDF generation
+import { sendBrochure } from './services/brochureService';
 import { attachSockets } from './socket';
 import contactRouter from './routes/contact';
 
@@ -17,8 +19,20 @@ const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:8100';
 const app = express();
 const server = http.createServer(app);
 
+// Allow multiple frontend origins (including preview and alternate local port)
+const allowedOrigins = [FRONTEND_ORIGIN, 'https://preview.augreen.cl', 'http://localhost:5121'];
+
 app.use(helmet());
-app.use(cors({ origin: FRONTEND_ORIGIN }));
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin (e.g. curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    return callback(new Error('CORS policy: origin not allowed'));
+  },
+  exposedHeaders: ['Content-Disposition']
+}));
+
 app.use(express.json());
 
 // Static uploads
@@ -44,6 +58,11 @@ app.use('/api/contact', contactRouter);
 
 // Simple health
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
+// Brochure generation endpoint - delegated to service
+app.get('/api/brochure', async (_req, res) => {
+  await sendBrochure(res);
+});
 
 // Attach Socket.IO
 attachSockets(server);

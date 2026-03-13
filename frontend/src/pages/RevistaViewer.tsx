@@ -15,6 +15,9 @@ const RevistaViewer: React.FC = () => {
   const viewerWrapRef = useRef<HTMLDivElement | null>(null);
   const [pageWidth, setPageWidth] = useState<number>(700);
   const historyRef = useRef<any>(null);
+  const [zoomed, setZoomed] = useState<boolean>(false);
+  const lastTapRef = useRef<number>(0);
+  const ZOOM_SCALE = 1.6;
 
   // responsive width: measure container and cap at 700, with small padding
   useEffect(() => {
@@ -40,6 +43,15 @@ const RevistaViewer: React.FC = () => {
     if (viewerWrapRef.current) viewerWrapRef.current.scrollTop = 0;
   }, [pageNumber]);
 
+  const handleTouch = (ev: React.TouchEvent) => {
+    const now = Date.now();
+    if (now - (lastTapRef.current || 0) < 300) {
+      ev.preventDefault();
+      setZoomed(z => !z);
+    }
+    lastTapRef.current = now;
+  };
+
   return (
     <IonPage>
       <IonContent className="ion-padding">
@@ -52,16 +64,37 @@ const RevistaViewer: React.FC = () => {
 
             </IonToolbar>
 
-          <div ref={viewerWrapRef} style={{ borderRadius: 12, overflow: 'hidden', boxShadow: '0 20px 40px rgba(2,8,23,0.08)', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Document
-              file="/doc/RevistaOZONOv37.pdf"
-              onLoadSuccess={onDocumentLoadSuccess}
-              loading={<div style={{ padding: 40, textAlign: 'center' }}>Cargando documento...</div>}
-              noData={<div style={{ padding: 40 }}>Documento no encontrado.</div>}
-            >
-              <Page pageNumber={pageNumber} width={pageWidth} renderTextLayer={false} renderAnnotationLayer={false} />
-            </Document>
-          </div>
+          {(() => {
+            const widthToUse = zoomed ? Math.round(pageWidth * ZOOM_SCALE) : pageWidth;
+            const viewerStyle: React.CSSProperties = {
+              borderRadius: 12,
+              overflowX: zoomed ? 'auto' : 'hidden',
+              boxShadow: '0 20px 40px rgba(2,8,23,0.08)',
+              maxHeight: 'calc(100vh - 190px)',
+              display: 'flex',
+              // always align to top to ensure the document's top is visible
+              alignItems: 'flex-start',
+              justifyContent: zoomed ? 'flex-start' : 'center',
+              paddingTop: 8,
+            };
+
+            return (
+              <div ref={viewerWrapRef} style={viewerStyle}>
+                <Document
+                  file="/doc/RevistaOZONOv37.pdf"
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  loading={<div style={{ padding: 40, textAlign: 'center' }}>Cargando documento...</div>}
+                  noData={<div style={{ padding: 40 }}>Documento no encontrado.</div>}
+                >
+                  <div onDoubleClick={() => setZoomed(z => !z)} onTouchEnd={handleTouch} style={{ display: 'flex', justifyContent: zoomed ? 'flex-start' : 'center', padding: '12px' }}>
+                    <div style={{ transition: 'transform .18s ease', transform: 'none', minWidth: widthToUse, paddingTop: 6 }}>
+                      <Page pageNumber={pageNumber} width={widthToUse} renderTextLayer={false} renderAnnotationLayer={false} />
+                    </div>
+                  </div>
+                </Document>
+              </div>
+            );
+          })()}
 
           <div style={{ marginTop: 12, color: 'var(--text-muted)', display: 'flex', gap: 12, alignItems: 'center' }}>
             {numPages ? (

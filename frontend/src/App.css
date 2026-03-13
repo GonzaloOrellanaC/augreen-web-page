@@ -112,6 +112,13 @@ h1,h2,h3,button, .logo-text { font-family: var(--font-logo); }
 .ion-row { display:flex; gap:24px; flex-wrap:wrap; }
 .ion-col { flex:1 1 260px; }
 
+/* Reusable centered container with responsive lateral padding */
+.container { max-width: 1400px; margin: 0 auto; padding: 0 28px; }
+
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+}
+
 /* Ensure images inside cards and service pages share the same visual height
    and never exceed 200px. Keeps aspect with object-fit:cover. */
 .card-premium img,
@@ -243,3 +250,4 @@ footer { padding: 60px 28px 30px; background: #071021; color: rgba(255,255,255,0
   .gallery-item.big { grid-column: span 1; }
   .contact-grid { grid-template-columns: 1fr; }
 }
+
