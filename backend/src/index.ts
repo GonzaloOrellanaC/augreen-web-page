@@ -22,7 +22,22 @@ const server = http.createServer(app);
 // Allow multiple frontend origins (including preview and alternate local port)
 const allowedOrigins = [FRONTEND_ORIGIN, 'https://preview.augreen.cl', 'http://localhost:5121'];
 
-app.use(helmet());
+// Configure Helmet with a Content Security Policy that allows embedding YouTube
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", 'https://www.youtube.com', 'https://www.youtube-nocookie.com'],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'", 'https:'],
+      frameSrc: ["'self'", 'https://www.youtube.com', 'https://www.youtube-nocookie.com'],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+    }
+  }
+}));
 app.use(cors({
   origin: (origin, callback) => {
     // allow requests with no origin (e.g. curl, server-to-server)
